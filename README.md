@@ -1,73 +1,27 @@
-# Reference guided genome assembly using *MindTheGap*
-
-## *MindTheGap* contig mode
-
-In addition to the assembly of structural variations, the fill module of MindTheGap can be used as a genome assembly finishing tool.
-The basic usage of this mode is :
-
-```bash
-MindTheGap fill (-in <reads.fq> | -graph <graph.h5>) -contig <contigs.fa>) [options]
-```
-
-Options are similar to those of the standard mode of MindTheGap.
-`-contig` is a fasta file containing the contigs to use.
-Although MindTheGap has been tested with contigs from Minia, which uses similar assembly heuristics, contigs from any assembler may be used.
-
-### Output
-
-In contig mode, *MindTheGap* returns 3 files ; 
-1. GFA output
-    The assembly is returned in a [GFA format graph](https://github.com/GFA-spec/GFA-spec).
-    Both initial contigs and gapfilling sequences are represented by segments. Links indicate an overlap between segments.
-    
-    GFA Graph supplied by MindTheGap may contain redundant sequences.
-    Before further analyses, it should be simplified using the script available in `pipeline/genome/graph/graph_simplification.py`
-    Its usage is `graph_simplification.py MindTheGap_output.gfa simplified_graph.gfa`
-
-    Afterwards, the graph can be further analyzed using [Bandage](https://github.com/rrwick/Bandage) 
-
-2. Info file
-    This file is supplied as `out.info.txt`
-    It is a tab delimited file, with one by seed kmer used during the gapfilling process (and therefore two by input contigs)
-    Column 1 is the seed identifier, made of the contig name and an eventual "_Rc" suffix if it is the reverse complemented seed.
-    Column 2 and 3 are the number of nodes and total length of the graph built during the local assembly process
-    Column 4 is the number of nodes containing a target kmer.
-    Columns 5 and 6 are the number of solutions found, before and after comparison of the sequences under a 90% identity threshold.
-
-3. Insertions sequences
-    In addition to the GFA file, insertion sequences are reported in the fasta format in the `out.insertions.fa` file.
+# MinYS - MineYourSymbiont
 
 
-### Additional parameters :
 
-#### Contig overlap
+MinYS allows targeted assembly of bacterial genomes using a reference-guided pipeline. It consists in 3 steps : 
 
-In many assembly outputs, contigs ends may overlap.
-In particular, contigs from *De Bruijn* based assemblies may overlap from `k`.
-In case the overlap between your contigs exceeds the 'k' value chosen for *MindTheGap*, we recommand specifying the overlap using the `-overlap` option.
+- Mapping metagenomic reads on a reference genome using BWA. And assembling the recruited reads using [Minia](https://github.com/GATB/minia).
+- Gapfilling the contig set using [MindTheGap](https://github.com/GATB/MindTheGap) in *contig mode*.
+- Simplifying the GFA output of MindTheGap.
 
-#### Graph complexity
 
-Local assembly may be tuned by allowing larger and more complex assemblies between the contigs.
-Option `-max-length` specifies the maximum length a gapfilling may reach, while option `-max-nodes` is the number of nodes that can be built in the assembly graph.
-Increasing these two parameters may improve the results for gapfilling of assemblies much shorter than their expected size.
 
-## *MindTheGap* assembly pipeline
+MinYS was developed in [GenScale](https://team.inria.fr/genscale/) by :
 
-Along with *MindTheGap* is distributed a pipeline enabling reference guided genome assembly.
-It consists in three steps : 
-- Recruiting reads by mapping onto the reference genome.
-- Assembly of those reads.
-- Gapfilling of the contigs with the whole readset.
+- Cervin Guyomar
+- Claire Lemaitre
 
-This pipeline is available in `pipeline/mtg_pipeline.py`.
+
 
 ### Requirements
 
-- MindTheGap
+-  [MindTheGap](https://github.com/GATB/MindTheGap)
 - [BWA](http://bio-bwa.sourceforge.net/) (read mapping)
 - [Minia](https://github.com/GATB/minia) (contig assembly)
-- Biopython (graph simplification)
 - [Bandage](https://github.com/rrwick/Bandage) (Optionnal, for assembly graph visualization) 
 
 ### Usage
@@ -106,10 +60,9 @@ This pipeline is available in `pipeline/mtg_pipeline.py`.
 [core options]:
   -nb-cores             (1 arg) :    number of cores [Default: 0]
 ```
+
 - If *minia* of *MindTheGap* are not in $PATH, a path to the minia binary of MindTheGap build directory has to be supplied using `-minia-bin` or `-mtg-dir`
 - `-contigs` and `-graph` may be used to bypass the mapping/assembly step, or the graph creation. 
-    In the first case, `-assembly-kmer-size` should be supplied as the overlap between contigs.
-
-
+  In the first case, `-assembly-kmer-size` should be supplied as the overlap between contigs.
 
 
