@@ -52,12 +52,14 @@ class GenomeGraph:
        def nEdges(self):
               return(len([j for i in self.edges.values() for j in i])/2)
 
-       def add_node(self,nodeName,nodeSeq):
+       def add_node(self,nodeName,nodeSeq,check=True):
               newNode = GenomeNode(nodeSeq,nodeName)
-              try:
-                     assert newNode not in self.nodes.values()
-              except AssertionError:
-                     print("Node " + nodeName + "is already in graph")
+
+              if check:
+                     try:
+                            assert newNode not in self.nodes.values()
+                     except AssertionError:
+                            print("Node " + nodeName + "is already in graph")
                      
               if len(self.nodes)>0:
                      self.maxId = self.maxId+1
@@ -107,7 +109,7 @@ class GenomeGraph:
    
            
        @classmethod
-       def read_gfa(self,file):
+       def read_gfa(self,file,check=True):
               
               g = GenomeGraph()
               nodeIds = {}  # Used to retrieve a node Id from a name. Is it useful though?
@@ -118,7 +120,7 @@ class GenomeGraph:
                             if re.match(r"S.*", line):
                                    nodeName = line.split("\t")[1]
                                    nodeSeq = line.split("\t")[2].strip()
-                                   g.add_node(nodeName,nodeSeq)
+                                   g.add_node(nodeName,nodeSeq,check)
                                    nodeIds[nodeName] = g.nNodes()
                             elif re.match(r"L.*",line):
                                    startName,startDir,endName,endDir,overlap = line.split("\t")[1:]
