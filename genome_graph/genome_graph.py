@@ -170,6 +170,20 @@ class GenomeGraph:
                                           written_edges.add((-src_id,dst_id))
                                           written_edges.add((-dst_id,src_id))
 
+       def stats(self):
+              print("Number of nodes : " + str(self.nNodes()))
+              print("Number of edges : " + str(self.nEdges()))
+
+              print("Number of connected components : " + str(len(self.connected_components())))
+
+              totLength = 0
+              for n in self.nodes:
+                     totLength = totLength + len(self.nodes[n].nodeSeq)
+              # Overlaps are not counted in the sequence length
+              # Here we assume all nodes have the same overlap
+              totLength = totLength - self.nEdges()*self.overlap
+              
+              print("Total length : " + str(totLength))
 
        ###########  Graph simplification ###########
 

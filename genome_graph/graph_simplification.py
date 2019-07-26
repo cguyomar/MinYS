@@ -16,6 +16,11 @@ opts = op.parse_args()
 print("Loading graph")
 g = genome_graph.GenomeGraph.read_gfa(opts.infile) 
 
+print("\n")
+print("Statistics of input graph : ")
+g.stats()
+print("\n")
+
 print("Popping bubbles")
 g.pop_all_bubbles()
 
@@ -28,5 +33,10 @@ g.merge_all_gapfillings()
 # rerun linear path
 print("Merging linear paths")
 g.merge_all_linear_paths()
+
+print("\n")
+print("Statistics of output graph : ")
+g.stats()
+print("\n")
 
 g.write_gfa(opts.outfile)
