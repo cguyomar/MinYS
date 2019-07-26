@@ -370,7 +370,7 @@ class GenomeGraph:
 
        def BFS(self, n):
               res = set()
-              visited = [False] * (self.nNodes()+1) #(nodes are 1 indexed)
+              visited = [False] * (self.maxId+1) # Nodes are 1-indexed
        
               q = [] 
        
@@ -389,7 +389,7 @@ class GenomeGraph:
               return(res)
        
        def connected_components(self):
-              visited = [False] * (self.nNodes()+1) #(nodes are 1 indexed)
+              visited = [False] * (self.maxId+1) # Nodes are 1-indexed
               res = []
               for n in self.nodes:
                      if visited[n] == False:
