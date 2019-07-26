@@ -100,6 +100,9 @@ class GenomeGraph:
        def get_neighbors(self,nodeId):
               return(self.edges[nodeId])
 
+       def neighborhood(self,nodeId):
+              return(self.get_neighbors(nodeId) | self.get_neighbors(-nodeId))
+
        def get_node_seq(self,nodeId):
               if nodeId < 0:
                      nodeSeq = reverse_complement(self.nodes[-nodeId].nodeSeq.strip())
@@ -350,4 +353,36 @@ class GenomeGraph:
                      paths = extended.copy()
                      extended = setExtend(paths,self)
               return(extended)
+
+       def BFS(self, n):
+              res = set()
+              visited = [False] * (self.nNodes()+1) #(nodes are 1 indexed)
+       
+              q = [] 
+       
+              q.append(abs(n)) 
+              visited[abs(n)] = True
+       
+              while q: 
+                     #print(q)
+                     s = q.pop(0)
+                     res.add(abs(s))
+       
+                     for i in self.neighborhood(s): 
+                            if visited[abs(i)] == False: 
+                                   q.append(abs(i)) 
+                                   visited[abs(i)] = True
+              return(res)
+       
+       def connected_components(self):
+              visited = [False] * (self.nNodes()+1) #(nodes are 1 indexed)
+              res = []
+              for n in self.nodes:
+                     if visited[n] == False:
+                            comp = self.BFS(n)
+                            for i in comp:
+                                   visited[i] = True
+                            res.append(comp)
+              return(res)
+              
 
