@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 # Wrapper for the MindTheGap reference guided assembly pipeline
 

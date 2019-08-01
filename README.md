@@ -24,6 +24,15 @@ MinYS was developed in [GenScale](https://team.inria.fr/genscale/) by :
 - [Minia](https://github.com/GATB/minia) (contig assembly)
 - [Bandage](https://github.com/rrwick/Bandage) (Optionnal, for assembly graph visualization) 
 
+### Installation
+
+```
+git clone https://github.com/cguyomar/MinYS
+cd MinYS
+make -C nwalign/
+./MinYS.py
+```
+
 ### Usage
 
 ```

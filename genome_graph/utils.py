@@ -25,8 +25,8 @@ def compare_strings(str1,str2):
             return(i)
 
 def locate_nw_binary():
-    scriptDir = os.path.abspath(os.path.dirname(sys.argv[0]))
-    nwCommand = os.path.join(scriptDir,"../../build/bin/nwalign")
+    scriptDir = os.path.dirname(os.path.abspath(__file__))
+    nwCommand = os.path.join(scriptDir,"../nwalign/nwalign")
     if os.path.isfile(nwCommand)==False:
         print("No nwAlign binary found in " + nwCommand)
     return(nwCommand)
