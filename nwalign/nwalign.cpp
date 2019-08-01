@@ -5,8 +5,8 @@ Usage : nwalign < infile
 Where infile is a two lines file with the two sequences to compare
 Outputs identity score in stdout
 *********************************************************************/
-#define _GLIBCXX_USE_CXX11_ABI 0
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 
