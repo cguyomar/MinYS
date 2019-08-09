@@ -44,6 +44,8 @@ parserMain.add_argument('-fof', action="store", dest="input_fof", help="input fi
 parserMain.add_argument('-out', action="store", dest="out", default="./mtg_results", help="output directory for result files")
 
 parserMapping.add_argument('-ref', action="store", dest="ref_genome", help="bwa index", required=False)
+parserMapping.add_argument('-mask', action="store", dest="mask", help="bed file for region removed from mapping", required=False)
+
 
 parserAssembly.add_argument('-minia-bin', action="store", dest="minia_bin", help="path to Minia binary (if not in $PATH")
 parserAssembly.add_argument('-assembly-kmer-size', action="store", dest="minia_kmer_size", help="kmer size used for Minia assembly (should be given even if bypassing minia assembly step, usefull knowledge for gap-filling)", default="31")
@@ -155,17 +157,26 @@ if args.continue_contigs is None:
         sam2bamCommand = "samtools view -b -F 4 -"
         bamFile = os.path.join(mappingDir, name + ".bam")
 
+        if args.mask is not None:
+            maskingCommand = "bedtools intersect -abam stdin -v -b " + args.mask
+
         tmpFqFile = os.path.join(mappingDir, name + "_mapped_reads.fastq")
         bam2fqCommand = "samtools bam2fq " + bamFile
 
         # Executing
         logger.info("\tCall : "+ mappingCommand)
+        
 
         with open(mappingLog,"wb") as out:
             p1 = subprocess.Popen(mappingCommand.split(),stdout=subprocess.PIPE,stderr=out)
-            p2 = subprocess.Popen(sam2bamCommand.split(),stdin=p1.stdout,stdout=open(bamFile,"w"),stderr=out)
-        p2.wait()
-        if p2.returncode != 0: logger.error("Mapping failed"); exit(1)
+            if args.mask is not None:
+                p2 = subprocess.Popen(sam2bamCommand.split(),stdin=p1.stdout,stdout=subprocess.PIPE,stderr=out)
+                p3 = subprocess.Popen(maskingCommand.split(),stdin=p2.stdout,stdout=open(bamFile,"w"),stderr=out)
+            else:
+                p3 = subprocess.Popen(sam2bamCommand.split(),stdin=p1.stdout,stdout=open(bamFile,"w"),stderr=out)
+        p3.wait()
+        if p3.returncode != 0: logger.error("Mapping failed"); exit(1)
+       
 
         with open(tmpFqFile,"wb") as out,open(mappingLog,"wb") as log:
             p = subprocess.Popen(bam2fqCommand.split(),stdout=out,stderr=subprocess.PIPE)
