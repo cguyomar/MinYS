@@ -356,17 +356,15 @@ class GenomeGraph:
        # Enumerates all possible paths going through a node
               p = Path(self,startNode)
               paths = {p}
-              extended = setExtend(paths,self)
+              extendedPaths, extended = setExtend(paths,self)
               nbExtension = 1
-              while extended != paths:# and nbExtension < 100:
-                     #print(nbExtension)
+              while extended:
                      nbExtension += 1
-                     #if max([len(p.nodeIds) for p in {p}]) > 120:
-                     #       return(extended)
-                     # There are smarter things to do
-                     paths = extended.copy()
-                     extended = setExtend(paths,self)
-              return(extended)
+
+                     # There are smarter things to do : we don't need to try to extend the whole set
+                     paths = extendedPaths.copy()
+                     extendedPaths, extended = setExtend(paths,self)
+              return(extendedPaths)
 
        def BFS(self, n):
               res = set()

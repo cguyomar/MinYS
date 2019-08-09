@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
 """
-Enumerate all paths going thorugh the longest node of a gfa graph
+Enumerate all paths going through the longest node of a gfa graph
 """
 
 import argparse
 
 import genome_graph
+
+
 
 op = argparse.ArgumentParser()
 op.add_argument("infile")

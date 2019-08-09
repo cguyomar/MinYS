@@ -123,9 +123,11 @@ class Path:
 def setExtend(paths,g):
 # extends a set of paths in both directions
     extendedPaths = set()
+    extended=False
     for p in paths:
         extension = p.extend_right(g)
         if extension != False:  # path has been extended
+            extended=True
             extendedPaths.update(extension)
         else: 
             extendedPaths.add(p) # We keep the unextended path
@@ -136,9 +138,10 @@ def setExtend(paths,g):
     for p in paths:
         extension = p.extend_left(g)
         if extension != False:  # path has been extended
+            extended=True
             extendedPaths.update(extension)
         else:
             extendedPaths.add(p) # We keep the unextended path
     
-    return(extendedPaths)
+    return(extendedPaths,extended)
 
