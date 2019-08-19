@@ -185,6 +185,16 @@ class GenomeGraph:
               
               print("Total length : " + str(totLength))
 
+       def longest_node(self):
+              maxLen = 0
+              for n in self.nodes:
+                     seq = self.nodes[n].nodeSeq
+                     name = self.nodes[n].nodeName
+                     if len(seq) > maxLen:
+                            longestNode = n
+                            maxLen = len(seq)
+              return(longestNode)
+
        ###########  Graph simplification ###########
 
        def pop_bubble(self,nodeId):
