@@ -29,8 +29,8 @@ def run_pyani(tempDir):
         #shutil.copyfile("./temp/path_"+str(j)+".fa","./temp/ani/"+str(pathj)+".fa")
 
         os.system("average_nucleotide_identity.py -i "+tempDir+" -o "+tempDir+"/ani_out -m ANIm")
-        identity = min(read_pyani_output("temp/ani_out/ANIm_percentage_identity.tab"))
-        cov = min(read_pyani_output("temp/ani_out/ANIm_alignment_coverage.tab"))
+        identity = min(read_pyani_output(os.path.join(tempDir,"ani_out/ANIm_percentage_identity.tab")))
+        cov = min(read_pyani_output(os.path.join(tempDir,"ani_out/ANIm_alignment_coverage.tab")))
 
         shutil.rmtree(os.path.join(tempDir,"./ani_out"))
         
@@ -53,7 +53,7 @@ def compare_paths(paths,outDir):
         print("Comparing "+str(len(paths))+" paths")
 
         # Preparing dirs
-        tmpDir = "./temp/"
+        tmpDir = "./"+outDir+"_temp"
         if os.path.isdir(outDir):
                 shutil.rmtree(outDir)
         os.mkdir(outDir)
@@ -61,8 +61,6 @@ def compare_paths(paths,outDir):
         if os.path.isdir(tmpDir):
                 shutil.rmtree(tmpDir)
         os.mkdir(tmpDir)
-        #shutil.copyfile("./temp/path_"+str(i)+".fa","./temp/ani/"+str(pathi)+".fa")
-        #shutil.copyfile("./temp/path_"+str(j)+".fa","./temp/ani/"+str(pathj)+".fa")
         unique_paths = []
         nb_unique_paths = 0
 
@@ -73,7 +71,7 @@ def compare_paths(paths,outDir):
                 seq = p.getSeq(g)
                 if nb_unique_paths==0:
                         #unique_path.append(i)
-                        write2fasta(seq,"path_1",os.path.join(outDir,"path1.fa"))
+                        write2fasta(seq,"path_1",os.path.join(outDir,"path_1.fa"))
                         nb_unique_paths += 1
                         print("Added 1 unique path")
                 else:
@@ -90,7 +88,7 @@ def compare_paths(paths,outDir):
                         for refPath in refPaths:
                                 # print("Comparing with "+refPath)
 
-                                # COpy the current ref in the ani dir
+                                # Copy the current ref in the ani dir
                                 shutil.copyfile(os.path.join(outDir,refPath),os.path.join(tmpDir,refPath))
                                 identity,coverage = run_pyani(tmpDir)
 
