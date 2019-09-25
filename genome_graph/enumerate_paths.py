@@ -83,7 +83,7 @@ def compare_paths(paths,outDir):
                         write2fasta(seq,seqName,os.path.join(tmpDir,seqName+".fa"))
 
                         # Now compare to each of the ref seq
-                        refPaths = filter(os.path.isfile, os.listdir(outDir))
+                        refPaths = [f for f in os.listdir(outDir) if os.path.isfile(os.path.join(outDir, f))]
                         newSeq = True
                         maxCov = 0
                         maxId = 0
