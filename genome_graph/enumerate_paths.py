@@ -29,8 +29,8 @@ def run_pyani(tempDir):
         #shutil.copyfile("./temp/path_"+str(j)+".fa","./temp/ani/"+str(pathj)+".fa")
 
         os.system("average_nucleotide_identity.py -i "+tempDir+" -o "+tempDir+"/ani_out -m ANIm")
-        identity = min(read_pyani_output("temp/ani_out/ANIm_percentage_identity.tab"))
-        cov = min(read_pyani_output("temp/ani_out/ANIm_alignment_coverage.tab"))
+        identity = min(read_pyani_output(os.path.join(tempDir,"ani_out/ANIm_percentage_identity.tab")))
+        cov = min(read_pyani_output(os.path.join(tempDir,"ani_out/ANIm_alignment_coverage.tab")))
 
         shutil.rmtree(os.path.join(tempDir,"./ani_out"))
         
@@ -53,7 +53,7 @@ def compare_paths(paths,outDir):
         print("Comparing "+str(len(paths))+" paths")
 
         # Preparing dirs
-        tmpDir = "./temp/"
+        tmpDir = os.path.join(outDir,"temp")
         if os.path.isdir(outDir):
                 shutil.rmtree(outDir)
         os.mkdir(outDir)
@@ -90,7 +90,7 @@ def compare_paths(paths,outDir):
                         for refPath in refPaths:
                                 # print("Comparing with "+refPath)
 
-                                # COpy the current ref in the ani dir
+                                # Copy the current ref in the ani dir
                                 shutil.copyfile(os.path.join(outDir,refPath),os.path.join(tmpDir,refPath))
                                 identity,coverage = run_pyani(tmpDir)
 
@@ -146,7 +146,8 @@ compIter = 1
 for comp in comps:
     print("Searching paths in component "+str(compIter))
     startNode = g.longest_node(comp)
-    paths = g.find_all_paths(startNode)  
+    paths = g.find_all_paths(startNode)
+
     print("Found "+str(len(paths))+" paths in component "+str(compIter)+"\n")
 
     compDir = os.path.join(opts.outdir,"comp_"+str(compIter))
