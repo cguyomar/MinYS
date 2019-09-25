@@ -185,9 +185,11 @@ class GenomeGraph:
               
               print("Total length : " + str(totLength))
 
-       def longest_node(self):
+       def longest_node(self,nodeIds=[]):
+              if nodeIds == []:
+                     nodeIds = self.nodes
               maxLen = 0
-              for n in self.nodes:
+              for n in nodeIds:
                      seq = self.nodes[n].nodeSeq
                      name = self.nodes[n].nodeName
                      if len(seq) > maxLen:

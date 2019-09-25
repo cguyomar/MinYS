@@ -29,8 +29,8 @@ def run_pyani(tempDir):
         #shutil.copyfile("./temp/path_"+str(j)+".fa","./temp/ani/"+str(pathj)+".fa")
 
         os.system("average_nucleotide_identity.py -i "+tempDir+" -o "+tempDir+"/ani_out -m ANIm")
-        identity = min(read_pyani_output(os.path.join(tempDir,"ani_out/ANIm_percentage_identity.tab")))
-        cov = min(read_pyani_output(os.path.join(tempDir,"ani_out/ANIm_alignment_coverage.tab")))
+        identity = min(read_pyani_output("temp/ani_out/ANIm_percentage_identity.tab"))
+        cov = min(read_pyani_output("temp/ani_out/ANIm_alignment_coverage.tab"))
 
         shutil.rmtree(os.path.join(tempDir,"./ani_out"))
         
@@ -53,7 +53,7 @@ def compare_paths(paths,outDir):
         print("Comparing "+str(len(paths))+" paths")
 
         # Preparing dirs
-        tmpDir = "./"+outDir+"_temp"
+        tmpDir = "./temp/"
         if os.path.isdir(outDir):
                 shutil.rmtree(outDir)
         os.mkdir(outDir)
@@ -61,6 +61,8 @@ def compare_paths(paths,outDir):
         if os.path.isdir(tmpDir):
                 shutil.rmtree(tmpDir)
         os.mkdir(tmpDir)
+        #shutil.copyfile("./temp/path_"+str(i)+".fa","./temp/ani/"+str(pathi)+".fa")
+        #shutil.copyfile("./temp/path_"+str(j)+".fa","./temp/ani/"+str(pathj)+".fa")
         unique_paths = []
         nb_unique_paths = 0
 
@@ -71,7 +73,7 @@ def compare_paths(paths,outDir):
                 seq = p.getSeq(g)
                 if nb_unique_paths==0:
                         #unique_path.append(i)
-                        write2fasta(seq,"path_1",os.path.join(outDir,"path_1.fa"))
+                        write2fasta(seq,"path_1",os.path.join(outDir,"path1.fa"))
                         nb_unique_paths += 1
                         print("Added 1 unique path")
                 else:
@@ -88,7 +90,7 @@ def compare_paths(paths,outDir):
                         for refPath in refPaths:
                                 # print("Comparing with "+refPath)
 
-                                # Copy the current ref in the ani dir
+                                # COpy the current ref in the ani dir
                                 shutil.copyfile(os.path.join(outDir,refPath),os.path.join(tmpDir,refPath))
                                 identity,coverage = run_pyani(tmpDir)
 
@@ -117,7 +119,7 @@ def compare_paths(paths,outDir):
                 
                 bar.next()
         bar.finish()
-        print("Number of unique Paths : "+str(nb_unique_paths))
+        print("Number of unique Paths : "+str(nb_unique_paths)+"\n")
 
 
 
@@ -126,15 +128,32 @@ op.add_argument("infile")
 op.add_argument("outdir")
 opts = op.parse_args()
 
+# Prepare out dir
+if os.path.isdir(opts.outdir):
+        shutil.rmtree(opts.outdir)
+os.mkdir(opts.outdir)
+
+# Read graph
 print("Loading graph")
 g = genome_graph.GenomeGraph.read_gfa(opts.infile) 
 
-startNode = g.longest_node()
+# List connected components
+comps = g.connected_components()
+print("Found "+str(len(comps))+" connected components \n")
 
-paths = g.find_all_paths(startNode)
-print("Found "+str(len(paths))+" paths")
+# Enumerate for each comp
+compIter = 1
+for comp in comps:
+    print("Searching paths in component "+str(compIter))
+    startNode = g.longest_node(comp)
+    paths = g.find_all_paths(startNode)  
+    print("Found "+str(len(paths))+" paths in component "+str(compIter)+"\n")
+
+    compDir = os.path.join(opts.outdir,"comp_"+str(compIter))
+    compare_paths(paths,compDir)
+
+    compIter += 1
 
 
-compare_paths(paths,opts.outdir)
 
 
