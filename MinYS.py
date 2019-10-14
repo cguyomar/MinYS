@@ -390,7 +390,7 @@ with open(simplLog,"wb") as out:
 p.wait()
 
 simplificationTime = time.time()
-simplificationDuration = round(gapfillingTime - mappingTime,1)
+simplificationDuration = round(simplifiactionTime - gapfillingTime,1)
 
 
 logger.info("Runtime :")
