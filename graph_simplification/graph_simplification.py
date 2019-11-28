@@ -6,7 +6,9 @@ Remove redundant gapfillings in a MindTheGap assembly graph
 
 import argparse
 
-import genome_graph
+from genome_graph import utils
+from genome_graph import genome_graph
+
 
 op = argparse.ArgumentParser()
 op.add_argument("infile")
@@ -14,7 +16,7 @@ op.add_argument("outfile")
 opts = op.parse_args()
 
 print("Loading graph")
-g = genome_graph.GenomeGraph.read_gfa(opts.infile) 
+g = genome_graph.GenomeGraph.read_gfa(opts.infile)
 
 print("\n")
 print("Statistics of input graph : ")

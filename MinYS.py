@@ -20,7 +20,7 @@ import logging
 import time
 
 #from MtgMin_utils import MtgParser, ArgumentFormatterMtg, read_mapping_header, ProgressBar
-from pipeline_utils import MtgParser, ArgumentFormatterMtg, contig_stats
+from minys_utils.minys_utils import MtgParser, ArgumentFormatterMtg, contig_stats
 
 
 #os.chdir(os.path.split(os.path.realpath(__file__))[0])
@@ -257,7 +257,7 @@ contig_stats(contigFile)
 
 logger.info("Filtering contigs")
 scriptPath = sys.path[0]
-filteringCommand = os.path.join(scriptPath,"filter_contigs.py")
+filteringCommand = os.path.join(scriptPath,"minys_utils/filter_contigs.py")
 filteringCommand += " " + args.min_contig_size
 
 filteredFile = assemblyPrefix + "_filtered_"+args.min_contig_size+".fa"
@@ -370,7 +370,7 @@ for line in logFile:
 
 
 pipelineDir = os.path.abspath(os.path.dirname(sys.argv[0]))
-simplificationCommand = [os.path.join(pipelineDir,"genome_graph/graph_simplification.py")]
+simplificationCommand = [os.path.join(pipelineDir,"graph_simplification/graph_simplification.py")]
 if os.path.isfile(simplificationCommand[0])==False:
     logger.error("Script not found : "+simplificationCommand)
 
@@ -390,7 +390,7 @@ with open(simplLog,"wb") as out:
 p.wait()
 
 simplificationTime = time.time()
-simplificationDuration = round(simplifiactionTime - gapfillingTime,1)
+simplificationDuration = round(simplificationTime - gapfillingTime,1)
 
 
 logger.info("Runtime :")

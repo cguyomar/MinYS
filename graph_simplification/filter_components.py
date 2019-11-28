@@ -6,7 +6,8 @@ Remove all connected components of a gfa graph smaller than a threshold
 
 import argparse
 
-import genome_graph
+from genome_graph import genome_graph
+
 
 op = argparse.ArgumentParser()
 op.add_argument("infile")
@@ -15,7 +16,7 @@ op.add_argument("minlength")
 opts = op.parse_args()
 
 print("Loading graph")
-g = genome_graph.GenomeGraph.read_gfa(opts.infile) 
+g = genome_graph.GenomeGraph.read_gfa(opts.infile)
 
 for comp in g.connected_components():
     #print(comp)
@@ -27,4 +28,3 @@ for comp in g.connected_components():
             g.rem_node(n)
 
 g.write_gfa(opts.outfile)
-

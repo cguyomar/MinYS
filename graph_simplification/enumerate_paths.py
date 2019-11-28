@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
 
 """
-Enumerate all paths going through the longest node of a gfa graph
--> Enumerates paths in one connected component only for now
+For each connected component of a gfa graph, enumerates all path going through the longest node of the component
+Merged similar paths using ani
 """
 
 import argparse
 
-import genome_graph
+
 
 import shutil
 import os
 from csv import reader
 from progress.bar import Bar
+import sys
 
-
+from genome_graph.genome_graph import GenomeGraph
 
 def write2fasta(seq,seqName,fileName):
         ofile = open(os.path.join(fileName), "w")
@@ -33,7 +34,7 @@ def run_pyani(tempDir):
         cov = min(read_pyani_output(os.path.join(tempDir,"ani_out/ANIm_alignment_coverage.tab")))
 
         shutil.rmtree(os.path.join(tempDir,"./ani_out"))
-        
+
         return(identity,cov)
 
 def read_pyani_output(file):
@@ -116,7 +117,7 @@ def compare_paths(paths,outDir):
                                 print("Found a new path with cov ="+str(maxCov)+" and id="+str(maxId))
                                 nb_unique_paths += 1
                                 shutil.move(os.path.join(tmpDir,seqName+".fa"),os.path.join(outDir,seqName+".fa"))
-                
+
                 bar.next()
         bar.finish()
         print("Number of unique Paths : "+str(nb_unique_paths)+"\n")
@@ -135,7 +136,7 @@ os.mkdir(opts.outdir)
 
 # Read graph
 print("Loading graph")
-g = genome_graph.GenomeGraph.read_gfa(opts.infile) 
+g = GenomeGraph.read_gfa(opts.infile)
 
 # List connected components
 comps = g.connected_components()
@@ -154,7 +155,3 @@ for comp in comps:
     compare_paths(paths,compDir)
 
     compIter += 1
-
-
-
-

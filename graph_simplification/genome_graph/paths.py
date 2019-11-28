@@ -1,4 +1,4 @@
-from utils import reverse_complement
+from .utils import reverse_complement
 from copy import deepcopy
 #from pipeline.genome_graph.genome_graph import *
 
@@ -7,6 +7,15 @@ class Path:
         self.nodes = [g.nodes[abs(nodeId)]]
         self.nodeIds = [nodeId]
         self.nNodes = 1
+        self.extendable = True
+        self.circular = False
+    
+    def is_circular(self,g):
+        neighbors = g.edges[self.nodeIds[-1]]
+        if self.nodeIds[0] in neighbors:
+            return(True)
+        else:
+            return(False)
     
     def extend_right(self,g):
         lastNode = self.nodeIds[-1]
@@ -77,6 +86,31 @@ class Path:
         else:
             return(False)
 
+    def extend_both(self,g):
+        # Try extending a path towards the right, and towards the left if it fails
+        extendedPaths = set()
+        extended = False
+
+        extR = self.extend_right(g)
+        if extR != False:
+            extendedPaths = extR
+            # extended = True
+            return(extendedPaths)
+
+
+        extL = self.extend_left(g)
+
+        if extL != False:
+            # extended = True
+            extendedPaths = extL
+            return(extendedPaths)
+        else:
+            self.extendable = False
+            return({self})
+
+            
+
+
     def getSeq(self,g):
         seq = ''
         for node in self.nodeIds:
@@ -125,23 +159,53 @@ def setExtend(paths,g):
     extendedPaths = set()
     extended=False
     for p in paths:
-        extension = p.extend_right(g)
-        if extension != False:  # path has been extended
-            extended=True
-            extendedPaths.update(extension)
-        else: 
-            extendedPaths.add(p) # We keep the unextended path
+        extension = p.extend_both(g)
+        if len(extension) > 1 or list(extension)[0].extendable == True:
+            extended = True
+            
+        extendedPaths.update(extension)
 
-    # We do the same on the left side
-    paths = deepcopy(extendedPaths)
-    extendedPaths = set()
-    for p in paths:
-        extension = p.extend_left(g)
-        if extension != False:  # path has been extended
-            extended=True
-            extendedPaths.update(extension)
-        else:
-            extendedPaths.add(p) # We keep the unextended path
+
+        # print(extension)
+        # if extension != False:  # path has been extended
+        #     extended=True
+
+            
+        #     for p2 in extension:
+        #         neighbors = g.edges[p2.nodeIds[-1]]
+        #         if p2.nodeIds[0] in neighbors:
+        #             extendedPaths.add(p)
+                          
+                
+
+
+
+        #     #extendedPaths.update(extension)
+        # else:
+        #     # we keep unextendable paths only if they are cycles
+        #     neighbors = g.edges[p.nodeIds[-1]]
+        #     if p.nodeIds[0] in neighbors:
+        #         print("toto")
+                          
+        #         extendedPaths.add(p)
+        #     else:
+        #         print("tata")
+
+
+    # # We do the same on the left side
+    # paths = deepcopy(extendedPaths)
+    # extendedPaths = set()
+    # for p in paths:
+    #     extension = p.extend_left(g)
+    #     if extension != False:  # path has been extended
+    #         extended=True
+    #         extendedPaths.update(extension)
+
+             
+
+    # if extended == False:
+    #     # We keep the unextended path
+    #     extendedPaths.add(p)
     
     return(extendedPaths,extended)
 

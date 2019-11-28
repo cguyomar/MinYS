@@ -13,9 +13,9 @@ g.edges : adjacency list of the nodes.
 import re
 import os
 import sys
-from utils import reverse_complement,compare_strings, nw_align, locate_nw_binary
+from .utils import reverse_complement,compare_strings, nw_align, locate_nw_binary
 #from alignment import PairAlign
-from paths import Path,setExtend
+from .paths import Path,setExtend
 
 nwCommand = locate_nw_binary()
 
@@ -369,14 +369,44 @@ class GenomeGraph:
               p = Path(self,startNode)
               paths = {p}
               extendedPaths, extended = setExtend(paths,self)
+              #print(extended)
               nbExtension = 1
               while extended:
+                     #print(str(len(extendedPaths))+"\n")
+                     nbExtension += 1
+
+                     paths = extendedPaths.copy()
+
+                     # Removing terminated non circular paths
+                     #print(str(len(paths)))
+                     paths = {p for p in paths if p.extendable == True}
+                     #print(str(len(paths)))
+
+                     # There are smarter things to do : we don't need to try to extend the whole set
+                     extendedPaths, extended = setExtend(paths,self)
+                     #for p in extendedPaths:
+                     #       print(p.nodeIds)
+              return(extendedPaths)
+
+
+       def find_all_cyclic_paths(self,startNode):
+       # Enumerates all possible paths going through a node
+              p = Path(self,startNode)
+              paths = {p}
+              extendedPaths, extended = setExtend(paths,self)
+              nbExtension = 1
+              while extended and len(extendedPaths)<200:
+                     print(str(len(extendedPaths))+"\n")
                      nbExtension += 1
 
                      # There are smarter things to do : we don't need to try to extend the whole set
                      paths = extendedPaths.copy()
                      extendedPaths, extended = setExtend(paths,self)
+                     for p in extendedPaths:
+                            print(p.nodeIds)
               return(extendedPaths)
+
+
 
        def BFS(self, n):
               res = set()

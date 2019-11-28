@@ -6,7 +6,7 @@ Output all sequences of a GFA graph longuer than minlength to a fasta file
 
 import argparse
 
-import genome_graph
+from genome_graph import genome_graph
 
 op = argparse.ArgumentParser()
 op.add_argument("infile")
@@ -15,7 +15,7 @@ op.add_argument("minlength")
 opts = op.parse_args()
 
 print("Loading graph")
-g = genome_graph.GenomeGraph.read_gfa(opts.infile) 
+g = genome_graph.GenomeGraph.read_gfa(opts.infile)
 
 ofile = open(opts.outfile, "w")
 for n in g.nodes.values():
@@ -24,4 +24,3 @@ for n in g.nodes.values():
     if len(seq) > int(opts.minlength):
         ofile.write(">" + name + "\n" + seq + "\n")
 ofile.close()
-
