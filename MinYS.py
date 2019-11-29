@@ -101,6 +101,10 @@ logger = logging.getLogger(__name__)
 # Mapping
 #-------------------------------------------------------------------------------------------------------------
 
+mappingNbCore = args.nb_cores
+if mappingNbCore == "0":
+    mappingNbCore = str(os.cpu_count())
+
 startTime = time.time()
 if args.continue_contigs is None:
 
@@ -150,7 +154,7 @@ if args.continue_contigs is None:
         name="file" + str(i)
         #Create commands
         mappingCommand = "bwa mem"
-        mappingCommand += " -t " + args.nb_cores
+        mappingCommand += " -t " + mappingNbCore
         mappingCommand += " " + args.ref_genome
         mappingCommand += " " + input1[i] + " " + input2[i]
 
