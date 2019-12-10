@@ -11,6 +11,8 @@ from genome_graph import genome_graph
 
 
 op = argparse.ArgumentParser()
+op.add_argument("-l",default=100,help="Length of minimal suffix for node merging",type=int)
+
 op.add_argument("infile")
 op.add_argument("outfile")
 opts = op.parse_args()
@@ -30,7 +32,7 @@ print("Merging linear paths")
 g.merge_all_linear_paths()
 
 print("Merging redundancies")
-g.merge_all_gapfillings()
+g.merge_all_gapfillings(opts.l)
 
 # rerun linear path
 print("Merging linear paths")

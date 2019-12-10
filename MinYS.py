@@ -34,6 +34,7 @@ parserMain = parser.add_argument_group("[main options]")
 parserMapping = parser.add_argument_group("[mapping options]")
 parserAssembly = parser.add_argument_group("[assembly options]")
 parserGapfilling = parser.add_argument_group("[gapfilling options]")
+parserSimplification = parser.add_argument_group("[simplification options]")
 parserContinue = parser.add_argument_group("[continue options]")
 parserCore = parser.add_argument_group("[core options]")
 
@@ -50,13 +51,15 @@ parserMapping.add_argument('-mask', action="store", dest="mask", help="bed file 
 parserAssembly.add_argument('-minia-bin', action="store", dest="minia_bin", help="path to Minia binary (if not in $PATH")
 parserAssembly.add_argument('-assembly-kmer-size', action="store", dest="minia_kmer_size", help="kmer size used for Minia assembly (should be given even if bypassing minia assembly step, usefull knowledge for gap-filling)", default="31")
 parserAssembly.add_argument('-assembly-abundance-min', action="store", dest="minia_abundance", help="Minimal abundance of kmers used for assembly", default="auto")
-parserAssembly.add_argument('-min-contig-size', action="store", dest="min_contig_size", default="0", help="minimal size for a contig to be used in gapfilling")
+parserAssembly.add_argument('-min-contig-size', action="store", dest="min_contig_size", default="0", help="minimal size for a contig to be used in gap-filling")
 
 parserGapfilling.add_argument('-mtg-dir', action="store", dest="mtg_dir", help="path to MindTheGap build directory (if not in $PATH)", required=False)
 parserGapfilling.add_argument('-gapfilling-kmer-size', action="store", dest="mtg_kmer_size", help="kmer size used for gapfilling", default="31")
 parserGapfilling.add_argument('-gapfilling-abundance-min', action="store", dest="mtg_abundance", help="Minimal abundance of kmers used for gapfilling", default="auto")
 parserGapfilling.add_argument('-max-nodes', action="store", dest="max_nodes", help="Maximum number of nodes in contig graph", default="100")
 parserGapfilling.add_argument('-max-length', action="store", dest="max_length", help="Maximum length of gapfilling (nt)", default="10000")
+
+parserSimplification.add_argument('-l',action="store",dest="simplification_l",help="Length of minimum prefix for node merging, default should work for most cases",default=100)
 
 parserContinue.add_argument('-contigs',action="store",dest="continue_contigs",help="Contigs in fasta format - override mapping and assembly")
 parserContinue.add_argument('-graph',action="store",dest="continue_h5",help="Graph in h5 format - override graph creation")

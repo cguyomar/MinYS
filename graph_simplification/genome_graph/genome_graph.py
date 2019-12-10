@@ -268,12 +268,12 @@ class GenomeGraph:
                                    p.merge(self)
                      node += 1
 
-       def merge_redundant_gapfillings(self,nodeId):
+       def merge_redundant_gapfillings(self,nodeId,l):
 
               # Starting from a node, look if an identical part of the adjacent nodes can be merged.
               # - get adjacent sequences
-              # - use a 100bp window to find potential similar sequences
-              # - for each 100bp primer, 
+              # - use a l bp window to find potential similar sequences
+              # - for each l bp primer, 
               #      - find the position of the first divergence
               #      - create a new node and shorten previous nodes
               
@@ -292,9 +292,9 @@ class GenomeGraph:
               # First we look at the first 100bp of each seq
               seqStarts = set()
               for seq in neighbors_sequences:
-                     if len(seq)>100: # We require at least 100 common bp to merge
-                            if seq[0:100] not in seqStarts:
-                                   seqStarts.add(seq[0:100])
+                     if len(seq)>l: # We require at least l common bp to merge
+                            if seq[0:l] not in seqStarts:
+                                   seqStarts.add(seq[0:l])
 
               nbSeq = 0 # Number of different merges
               for seqStart in seqStarts:
@@ -306,7 +306,7 @@ class GenomeGraph:
                      for neighbor in neighbors:
                             nseq = self.get_node_seq(neighbor)
                             
-                            if nseq[0:100] == seqStart:
+                            if nseq[0:l] == seqStart:
                                    toMerge.add(neighbor)
                                    if len(ref)==0:
                                           ref = nseq
@@ -351,15 +351,15 @@ class GenomeGraph:
                             else:
                                    self.nodes[-n].nodeSeq = self.nodes[-n].nodeSeq[0:-(mergePos-self.overlap-1)] 
 
-       def merge_all_gapfillings(self):
+       def merge_all_gapfillings(self,l):
               visited_nodes = set()
               node = 1
               while node < self.maxId:
                      if node in self.nodes.keys() and node not in visited_nodes:
                             #print("#### Merging from node : " + str(node))
-                            self.merge_redundant_gapfillings(node)
+                            self.merge_redundant_gapfillings(node,l)
                             #print("#### Merging from node : " + str(-node))
-                            self.merge_redundant_gapfillings(-node)
+                            self.merge_redundant_gapfillings(-node,l)
 
                             visited_nodes.add(node)
                      node += 1   
