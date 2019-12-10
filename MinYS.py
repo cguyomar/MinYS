@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Wrapper for the MindTheGap reference guided assembly pipeline
+# MinYS is a pipeline for reference guided genome assembly. See https://github.com/cguyomar/MinYS
 
 # 1) Map reads on a remote reference genome using BWA MEM
 # 2) Assemble reads using minia
@@ -247,7 +247,7 @@ if args.continue_contigs is None:
 
     #Check if assembly succeeded :
     if not os.path.exists(contigFile):
-        logger.error("Assembly failed: no contig output (try with other parameters)"); exit(1)
+        logger.error("Assembly failed: no contig output (try with different parameters)"); exit(1)
 
     logger.info("Assembly done")
 
@@ -281,49 +281,13 @@ assemblyDuration = round(assemblyTime - mappingTime,1)
 
 gapfillingDir = os.path.join(outDir, "gapfilling")
 if not os.path.exists(gapfillingDir): os.makedirs(gapfillingDir)
-h5Name = "graph_k"+args.mtg_kmer_size+"_abundancemin_"+args.mtg_abundance+".h5"
-h5File = os.path.join(gapfillingDir,h5Name)
+#h5Name = "graph_k"+args.mtg_kmer_size+"_abundancemin_"+args.mtg_abundance+".h5"
+#h5File = os.path.join(gapfillingDir,h5Name)
 gapfillingName = assemblyName+"_filtered_"+args.min_contig_size+"_gapfilling_k"+args.mtg_kmer_size+"_abundancemin_"+args.mtg_abundance
 gapfillingPrefix = os.path.join(gapfillingDir,gapfillingName)
 
-
-if args.continue_h5 is None:
-    if args.mtg_dir is None:
-        h5Command = ["dbgh5"]
-    else:
-        h5Command = [os.path.join(args.mtg_dir,"ext/gatb-core/bin/dbgh5")]
-    if args.input_file1 is not None:
-        h5Command.extend(["-in",args.input_file1+","+args.input_file2])
-    if args.input_file is not None:
-        h5Command.extend(["-in",args.input_file])
-    if args.input_fof is not None:
-        input_file_list=[]
-        with open(args.input_fof,"r") as fofFile:
-            for line in fofFile:
-                line = line.rstrip()
-                sp = line.split("\t")
-                input_file_list.append(sp[0])
-                if len(sp)>1:
-                    input_file_list.append(sp[1])
-        h5Command.extend(["-in",",".join(input_file_list)])
-
-    h5Command.extend(["-kmer-size",args.mtg_kmer_size])
-    h5Command.extend(["-abundance-min",args.mtg_abundance])
-    h5Command.extend(["-out",h5File])
-    h5Command.extend(["-nb-cores",args.nb_cores])
-    h5Log = os.path.join(logsDir,"dbgh5.log")
-
-
-    logger.info("Building graph")
-    logger.info("\tCall : "+ " ".join(h5Command))
-    logger.info("\tLog file : "+ h5Log)
-
-    with open(h5Log,"wb") as out:
-        p = subprocess.Popen(h5Command,stdout=out,stderr=out)
-    p.wait()
-
-graphTime = time.time()
-graphDuration = round(graphTime - assemblyTime,1)
+#graphTime = time.time()
+#graphDuration = round(graphTime - assemblyTime,1)
 
 #-------------------------------------------------------------------------------------------------------------
 # Gapfilling
@@ -336,10 +300,25 @@ else:
 mtgCommand.append("fill" )
 mtgCommand.extend(["-contig",filteredFile])
 if args.continue_h5 is None:
-    mtgCommand.extend(["-graph",h5File])
+    if args.input_file1 is not None:
+        mtgCommand.extend(["-in",args.input_file1+","+args.input_file2])
+    if args.input_file is not None:
+        mtgCommand.extend(["-in",args.input_file])
+    if args.input_fof is not None:
+        input_file_list=[]
+        with open(args.input_fof,"r") as fofFile:
+            for line in fofFile:
+                line = line.rstrip()
+                sp = line.split("\t")
+                input_file_list.append(sp[0])
+                if len(sp)>1:
+                    input_file_list.append(sp[1])
+        mtgCommand.extend(["-in",",".join(input_file_list)])
 else:
     mtgCommand.extend(["-graph",args.continue_h5])
-#mtgCommand.extend(["-abundance-min",args.mtg_abundance])
+   
+mtgCommand.extend(["-abundance-min",args.mtg_abundance])
+mtgCommand.extend(["-kmer-size",args.mtg_kmer_size])
 mtgCommand.extend(["-overlap",args.minia_kmer_size])
 mtgCommand.extend(["-out",gapfillingPrefix])
 mtgCommand.extend(["-nb-cores",args.nb_cores])
@@ -348,13 +327,14 @@ mtgCommand.extend(["-max-nodes",args.max_nodes])
 mtgLog = os.path.join(logsDir,"gapfilling.log")
 
 logger.info("Gapfilling")
+#print(mtgCommand)
 logger.info("\tCall : "+ " ".join(mtgCommand))
 
 with open(mtgLog,"wb") as out:
     p = subprocess.Popen(mtgCommand,stdout=out,stderr=out)
 p.wait()
 gapfillingTime = time.time()
-gapfillingDuration = round(gapfillingTime - graphTime,1)
+gapfillingDuration = round(gapfillingTime - assemblyTime,1)
 
 
 
