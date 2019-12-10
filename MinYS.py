@@ -59,7 +59,7 @@ parserGapfilling.add_argument('-gapfilling-abundance-min', action="store", dest=
 parserGapfilling.add_argument('-max-nodes', action="store", dest="max_nodes", help="Maximum number of nodes in contig graph", default="300")
 parserGapfilling.add_argument('-max-length', action="store", dest="max_length", help="Maximum length of gap-filling (nt)", default="50000")
 
-parserSimplification.add_argument('-l',action="store",dest="simplification_l",help="Length of minimum prefix for node merging, default should work for most cases",default=100)
+parserSimplification.add_argument('-l',action="store",dest="simplification_l",help="Length of minimum prefix for node merging, default should work for most cases",default="100")
 
 parserContinue.add_argument('-contigs',action="store",dest="continue_contigs",help="Contigs in fasta format - override mapping and assembly")
 parserContinue.add_argument('-graph',action="store",dest="continue_h5",help="Graph in h5 format - override graph creation")
@@ -366,6 +366,7 @@ outFile = gapfillingPrefix + ".simplified.gfa"
 
 simplLog = os.path.join(logsDir,"simplification.log")
 
+simplificationCommand += "-l " + args.simplification_l
 simplificationCommand.append(inFile)
 simplificationCommand.append(outFile)
 
@@ -383,7 +384,7 @@ simplificationDuration = round(simplificationTime - gapfillingTime,1)
 logger.info("Runtime :")
 logger.info("\tMapping : " + str(mappingDuration))
 logger.info("\tAssembly : " + str(assemblyDuration))
-logger.info("\tGraph creation : " + str(graphDuration))
+#logger.info("\tGraph creation : " + str(graphDuration))
 logger.info("\tGap-filling : " + str(gapfillingDuration))
 logger.info("\tGraph simplification : " + str(simplificationDuration))
 
