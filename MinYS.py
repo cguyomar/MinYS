@@ -38,33 +38,33 @@ parserSimplification = parser.add_argument_group("[simplification options]")
 parserContinue = parser.add_argument_group("[continue options]")
 parserCore = parser.add_argument_group("[core options]")
 
-parserMain.add_argument('-in', action="store", dest="input_file", help="input reads file", required=False)
-parserMain.add_argument('-1', action="store", dest="input_file1", help="input reads first file", required=False)
-parserMain.add_argument('-2', action="store", dest="input_file2", help="input reads second file", required=False)
-parserMain.add_argument('-fof', action="store", dest="input_fof", help="input file of read files (if paired files, 2 columns tab-separated)", required=False)
+parserMain.add_argument('-in', action="store", dest="input_file", help="Input reads file", required=False)
+parserMain.add_argument('-1', action="store", dest="input_file1", help="Input reads first file", required=False)
+parserMain.add_argument('-2', action="store", dest="input_file2", help="Input reads second file", required=False)
+parserMain.add_argument('-fof', action="store", dest="input_fof", help="Input file of read files (if paired files, 2 columns tab-separated)", required=False)
 parserMain.add_argument('-out', action="store", dest="out", default="./mtg_results", help="output directory for result files")
 
-parserMapping.add_argument('-ref', action="store", dest="ref_genome", help="bwa index", required=False)
-parserMapping.add_argument('-mask', action="store", dest="mask", help="bed file for region removed from mapping", required=False)
+parserMapping.add_argument('-ref', action="store", dest="ref_genome", help="Bwa index", required=False)
+parserMapping.add_argument('-mask', action="store", dest="mask", help="Bed file for region removed from mapping", required=False)
 
 
-parserAssembly.add_argument('-minia-bin', action="store", dest="minia_bin", help="path to Minia binary (if not in $PATH")
-parserAssembly.add_argument('-assembly-kmer-size', action="store", dest="minia_kmer_size", help="kmer size used for Minia assembly (should be given even if bypassing minia assembly step, usefull knowledge for gap-filling)", default="31")
+parserAssembly.add_argument('-minia-bin', action="store", dest="minia_bin", help="Path to Minia binary (if not in $PATH")
+parserAssembly.add_argument('-assembly-kmer-size', action="store", dest="minia_kmer_size", help="Kmer size used for Minia assembly (should be given even if bypassing minia assembly step, usefull knowledge for gap-filling)", default="31")
 parserAssembly.add_argument('-assembly-abundance-min', action="store", dest="minia_abundance", help="Minimal abundance of kmers used for assembly", default="auto")
-parserAssembly.add_argument('-min-contig-size', action="store", dest="min_contig_size", default="0", help="minimal size for a contig to be used in gap-filling")
+parserAssembly.add_argument('-min-contig-size', action="store", dest="min_contig_size", default="400", help="Minimal size for a contig to be used in gap-filling")
 
-parserGapfilling.add_argument('-mtg-dir', action="store", dest="mtg_dir", help="path to MindTheGap build directory (if not in $PATH)", required=False)
-parserGapfilling.add_argument('-gapfilling-kmer-size', action="store", dest="mtg_kmer_size", help="kmer size used for gapfilling", default="31")
-parserGapfilling.add_argument('-gapfilling-abundance-min', action="store", dest="mtg_abundance", help="Minimal abundance of kmers used for gapfilling", default="auto")
-parserGapfilling.add_argument('-max-nodes', action="store", dest="max_nodes", help="Maximum number of nodes in contig graph", default="100")
-parserGapfilling.add_argument('-max-length', action="store", dest="max_length", help="Maximum length of gapfilling (nt)", default="10000")
+parserGapfilling.add_argument('-mtg-dir', action="store", dest="mtg_dir", help="Path to MindTheGap build directory (if not in $PATH)", required=False)
+parserGapfilling.add_argument('-gapfilling-kmer-size', action="store", dest="mtg_kmer_size", help="Kmer size used for gap-filling", default="31")
+parserGapfilling.add_argument('-gapfilling-abundance-min', action="store", dest="mtg_abundance", help="Minimal abundance of kmers used for gap-filling", default="auto")
+parserGapfilling.add_argument('-max-nodes', action="store", dest="max_nodes", help="Maximum number of nodes in contig graph", default="300")
+parserGapfilling.add_argument('-max-length', action="store", dest="max_length", help="Maximum length of gap-filling (nt)", default="50000")
 
 parserSimplification.add_argument('-l',action="store",dest="simplification_l",help="Length of minimum prefix for node merging, default should work for most cases",default=100)
 
 parserContinue.add_argument('-contigs',action="store",dest="continue_contigs",help="Contigs in fasta format - override mapping and assembly")
 parserContinue.add_argument('-graph',action="store",dest="continue_h5",help="Graph in h5 format - override graph creation")
 
-parserCore.add_argument('-nb-cores', action="store", dest="nb_cores", help="number of cores", default="0")
+parserCore.add_argument('-nb-cores', action="store", dest="nb_cores", help="Number of cores", default="0")
 
 
 args =  parser.parse_args()
@@ -329,7 +329,7 @@ mtgCommand.extend(["-max-length",args.max_length])
 mtgCommand.extend(["-max-nodes",args.max_nodes])
 mtgLog = os.path.join(logsDir,"gapfilling.log")
 
-logger.info("Gapfilling")
+logger.info("Gap-filling")
 #print(mtgCommand)
 logger.info("\tCall : "+ " ".join(mtgCommand))
 
@@ -384,6 +384,6 @@ logger.info("Runtime :")
 logger.info("\tMapping : " + str(mappingDuration))
 logger.info("\tAssembly : " + str(assemblyDuration))
 logger.info("\tGraph creation : " + str(graphDuration))
-logger.info("\tGapfilling : " + str(gapfillingDuration))
+logger.info("\tGap-filling : " + str(gapfillingDuration))
 logger.info("\tGraph simplification : " + str(simplificationDuration))
 
