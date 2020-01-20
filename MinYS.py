@@ -8,7 +8,7 @@
 # 4) Clean the GFA graph
 
 # Sample test command to launch from ./test :
-# python ../pipeline/mtg_pipeline.py -contigs ../data/contigs.fasta -in ../data/contig-reads.fasta.gz -mtg-dir ../build/ 
+# python ../pipeline/mtg_pipeline.py -contigs ../data/contigs.fasta -in ../data/contig-reads.fasta.gz -mtg-dir ../build/
 
 import os, math
 from os import listdir
@@ -172,7 +172,7 @@ if args.continue_contigs is None:
 
         # Executing
         logger.info("\tCall : "+ mappingCommand)
-        
+
 
         with open(mappingLog,"wb") as out:
             p1 = subprocess.Popen(mappingCommand.split(),stdout=subprocess.PIPE,stderr=out)
@@ -183,7 +183,7 @@ if args.continue_contigs is None:
                 p3 = subprocess.Popen(sam2bamCommand.split(),stdin=p1.stdout,stdout=open(bamFile,"w"),stderr=out)
         p3.wait()
         if p3.returncode != 0: logger.error("Mapping failed"); exit(1)
-       
+
 
         with open(tmpFqFile,"wb") as out,open(mappingLog,"wb") as log:
             p = subprocess.Popen(bam2fqCommand.split(),stdout=out,stderr=subprocess.PIPE)
@@ -319,7 +319,7 @@ if args.continue_h5 is None:
         mtgCommand.extend(["-in",",".join(input_file_list)])
 else:
     mtgCommand.extend(["-graph",args.continue_h5])
-   
+
 mtgCommand.extend(["-abundance-min",args.mtg_abundance])
 mtgCommand.extend(["-kmer-size",args.mtg_kmer_size])
 mtgCommand.extend(["-overlap",args.minia_kmer_size])
@@ -366,7 +366,8 @@ outFile = gapfillingPrefix + ".simplified.gfa"
 
 simplLog = os.path.join(logsDir,"simplification.log")
 
-simplificationCommand += "-l " + args.simplification_l
+simplificationCommand.append("-l")
+simplificationCommand.append(args.simplification_l)
 simplificationCommand.append(inFile)
 simplificationCommand.append(outFile)
 
@@ -387,4 +388,3 @@ logger.info("\tAssembly : " + str(assemblyDuration))
 #logger.info("\tGraph creation : " + str(graphDuration))
 logger.info("\tGap-filling : " + str(gapfillingDuration))
 logger.info("\tGraph simplification : " + str(simplificationDuration))
-
