@@ -371,22 +371,19 @@ class GenomeGraph:
               extendedPaths, extended = setExtend(paths,self)
               #print(extended)
               nbExtension = 1
-              while extended:
-                     #print(str(len(extendedPaths))+"\n")
-                     nbExtension += 1
+              terminatedPaths = set()
+              while len(extendedPaths)>0:
 
-                     paths = extendedPaths.copy()
-
+                     paths = set()
                      # Removing terminated non circular paths
-                     #print(str(len(paths)))
-                     paths = {p for p in paths if p.extendable == True}
-                     #print(str(len(paths)))
-
-                     # There are smarter things to do : we don't need to try to extend the whole set
+                     for p in extendedPaths:
+                         if p.extendable != True:
+                             terminatedPaths.add(p)
+                         else:
+                             paths.add(p)
                      extendedPaths, extended = setExtend(paths,self)
-                     #for p in extendedPaths:
-                     #       print(p.nodeIds)
-              return(extendedPaths)
+
+              return(terminatedPaths)
 
 
        def find_all_cyclic_paths(self,startNode):

@@ -155,57 +155,15 @@ class Path:
 
             
 def setExtend(paths,g):
-# extends a set of paths in both directions
+    # extends a set of paths in both directions
     extendedPaths = set()
     extended=False
+
     for p in paths:
         extension = p.extend_both(g)
         if len(extension) > 1 or list(extension)[0].extendable == True:
             extended = True
-            
+
         extendedPaths.update(extension)
 
-
-        # print(extension)
-        # if extension != False:  # path has been extended
-        #     extended=True
-
-            
-        #     for p2 in extension:
-        #         neighbors = g.edges[p2.nodeIds[-1]]
-        #         if p2.nodeIds[0] in neighbors:
-        #             extendedPaths.add(p)
-                          
-                
-
-
-
-        #     #extendedPaths.update(extension)
-        # else:
-        #     # we keep unextendable paths only if they are cycles
-        #     neighbors = g.edges[p.nodeIds[-1]]
-        #     if p.nodeIds[0] in neighbors:
-        #         print("toto")
-                          
-        #         extendedPaths.add(p)
-        #     else:
-        #         print("tata")
-
-
-    # # We do the same on the left side
-    # paths = deepcopy(extendedPaths)
-    # extendedPaths = set()
-    # for p in paths:
-    #     extension = p.extend_left(g)
-    #     if extension != False:  # path has been extended
-    #         extended=True
-    #         extendedPaths.update(extension)
-
-             
-
-    # if extended == False:
-    #     # We keep the unextended path
-    #     extendedPaths.add(p)
-    
     return(extendedPaths,extended)
-
