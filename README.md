@@ -26,6 +26,13 @@ MinYS was developed in [GenScale](https://team.inria.fr/genscale/) by :
 
 ### Installation
 
+#### With Conda
+
+```
+conda install -c bioconda minys
+```
+
+#### From source
 ```
 git clone https://github.com/cguyomar/MinYS
 cd MinYS
