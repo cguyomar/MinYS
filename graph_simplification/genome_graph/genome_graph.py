@@ -196,6 +196,45 @@ class GenomeGraph:
 
        ###########  Graph simplification ###########
 
+       def split_branching_nodes(self,maxLinks):
+           # Find nodes with more than maxLinks neighbors, and split the graph by removing the neighbors_sequences
+           # (In the case of MinYS, removes gapfilled sequences)
+
+            nbCut = 0
+            for comp in self.connected_components():
+                for n in comp:
+                    if n in self.nodes:
+                        print(str(n))
+                        neighbors = self.get_neighbors(n).copy()
+                        if len(neighbors)>=maxLinks:
+                            nbCut += 1
+                            for n2 in neighbors:
+                                print("\t"+str(n2))
+                                self.rem_node(abs(n2))
+
+                                # Should we ensure that the node is a gapfilling?
+                                # self.rem_edge(n,n2)
+                                # n2Name = self.nodes[n2].nodeName
+                                # # Is one of the nodes is a gapfilling, we remove it
+                                # # This is specific to MinYS
+                                # if re.match(r".*;.*;len_.*_qual.*_median_cov.*",n2Name):
+                                #     self.rem_node(n2)
+                        neighbors = self.get_neighbors(-n).copy()
+                        if len(neighbors)>=maxLinks:
+                            nbCut += 1
+                            for n2 in neighbors:
+                                print("\t"+str(n2))
+                                self.rem_node(abs(n2))
+
+                                # self.rem_edge(-n,n2)
+                                # n2Name = self.nodes[n2].nodeName
+                                # # Is one of the nodes is a gapfilling, we remove it
+                                # # This is specific to MinYS
+                                # if re.match(r".*;.*;len_.*_qual.*_median_cov.*",n2Name):
+                                #     self.rem_node(n2)
+
+
+
        def pop_bubble(self,nodeId):
               n1 = self.get_neighbors(nodeId).copy()
               n2 = self.get_neighbors(-nodeId).copy()
