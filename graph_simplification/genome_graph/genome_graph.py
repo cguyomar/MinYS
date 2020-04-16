@@ -89,13 +89,10 @@ class GenomeGraph:
                      print("Node not in graph")
 
               for n in self.get_neighbors(nodeId).copy():
-                     self.rem_edge(-n,-nodeId)
+                     self.rem_edge(nodeId,n)
 
               for n in self.get_neighbors(-nodeId).copy():
-                     self.rem_edge(-n,nodeId)
-
-              self.edges.pop(nodeId)
-              self.edges.pop(-nodeId)
+                     self.rem_edge(-nodeId,n)
 
        def get_neighbors(self,nodeId):
               return(self.edges[nodeId])
