@@ -10,18 +10,18 @@ MinYS allows targeted assembly of bacterial genomes using a reference-guided pip
 
 
 
-MinYS was developed in [GenScale](https://team.inria.fr/genscale/) by :
+MinYS was developed in the [GenScale lab](https://team.inria.fr/genscale/) by :
 
 - Cervin Guyomar
-- Claire Lemaitre
+- [Claire Lemaitre](http://people.rennes.inria.fr/Claire.Lemaitre/index.php)
 
 
 
 ### Requirements
 
-- [MindTheGap](https://github.com/GATB/MindTheGap)
 - [BWA](http://bio-bwa.sourceforge.net/) (read mapping)
 - [Minia](https://github.com/GATB/minia) (contig assembly)
+- [MindTheGap](https://github.com/GATB/MindTheGap) (gap-filling)
 - [Bandage](https://github.com/rrwick/Bandage) (Optionnal, for assembly graph visualization)
 
 ### Installation
@@ -88,8 +88,8 @@ head MinYS_results/gapfilling/minia_k31_abundancemin_auto_filtered_400_gapfillin
 
 ```
 
-- If *minia* of *MindTheGap* are not in $PATH, a path to the minia binary of MindTheGap build directory has to be supplied using `-minia-bin` or `-mtg-dir`
-- `-contigs` and `-graph` may be used to bypass the mapping/assembly step, or the graph creation.
+- If *minia* or *MindTheGap* are not in the $PATH environment variable, a path to the minia binary or to the MindTheGap build directory has to be supplied using `-minia-bin` or `-mtg-dir` options
+- `-contigs` and `-graph` may be used to bypass the mapping/assembly step, and the graph creation, respectively.
   In the first case, `-assembly-kmer-size` should be supplied as the overlap between contigs.
 
 
@@ -99,13 +99,17 @@ A [step by step tutorial](doc/tutorial.ipynb) of the analysis of one sample pres
 
 ### Utility scripts :
 
-Some utility scripts are supplied along with MinYS in order to facilitate the post processing of the gfa graph :
+Some utility scripts are supplied along with MinYS in order to facilitate the post processing of the output gfa graph :
 
 - `graph_simplification/enumerate_paths.py in.gfa out_dir`
-  Enumerate all the paths in connected components of a graph. Returns paths with a significant difference (ANI < 99\% or alignment coverage <99\%)
+  Enumerate all the paths of each connected component of a graph. Returns paths that are substantially different from one another (ANI < 99\% or alignment coverage <99\%)
 
 - `graph_simplification/filter_components.py in.gfa min_size`
-   Return a sub-graph containing all the connected components longer than `min_size`
+   Return a sub-graph containing all the connected components larger than `min_size` (in total assembled nt)
 
 - `graph_simplification/gfa2fasta.py in.gfa out.fa`
-  Return each sequence of the graph in a multi-fasta file
+  Return all the sequences of the graph in a multi-fasta file
+ 
+### Reference
+
+MinYS: Mine Your Symbiont by targeted genome assembly in symbiotic communities. Guyomar C, Delage W, Legeai F, Mougel C, Simon JC, Lemaitre C. BioRxiv 2019, [doi:10.1101/2019.12.13.875021](https://www.biorxiv.org/content/10.1101/2019.12.13.875021v1)
