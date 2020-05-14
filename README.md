@@ -42,8 +42,11 @@ make -C graph_simplification/nwalign/
 
 #### Test run
 ```
-MinYS.py -1 test_data/reads.1.fq -2 test_data/reads.2.fq -ref test_data/ref.fa
+MinYS.py -1 test_data/reads.1.fq -2 test_data/reads.2.fq -ref test_data/ref.fa -out MinYS_result
+# look at the output file:
 head MinYS_results/gapfilling/minia_k31_abundancemin_auto_filtered_400_gapfilling_k31_abundancemin_auto.simplified.gfa
+# should contain only one sequence node of 15,722 bp, or see also the logs:
+more MinYS_results/logs/simplification.log
 ```
 
 ### Options
