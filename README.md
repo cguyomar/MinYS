@@ -40,7 +40,13 @@ make -C graph_simplification/nwalign/
 ./MinYS.py
 ```
 
-### Usage
+#### Test run
+```
+MinYS.py -1 test_data/reads.1.fq -2 test_data/reads.2.fq -ref test_data/ref.fa
+head mtg_results/gapfilling/minia_k31_abundancemin_auto_filtered_400_gapfilling_k31_abundancemin_auto.simplified.gfa
+```
+
+### Options
 
 ```
 [main options]:
