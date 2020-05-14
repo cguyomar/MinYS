@@ -43,7 +43,7 @@ make -C graph_simplification/nwalign/
 #### Test run
 ```
 MinYS.py -1 test_data/reads.1.fq -2 test_data/reads.2.fq -ref test_data/ref.fa
-head mtg_results/gapfilling/minia_k31_abundancemin_auto_filtered_400_gapfilling_k31_abundancemin_auto.simplified.gfa
+head MinYS_results/gapfilling/minia_k31_abundancemin_auto_filtered_400_gapfilling_k31_abundancemin_auto.simplified.gfa
 ```
 
 ### Options
@@ -54,7 +54,7 @@ head mtg_results/gapfilling/minia_k31_abundancemin_auto_filtered_400_gapfilling_
   -1                    (1 arg) :    Input reads first file
   -2                    (1 arg) :    Input reads second file
   -fof                  (1 arg) :    Input file of read files (if paired files, 2 columns tab-separated)
-  -out                  (1 arg) :    output directory for result files [Default: ./mtg_results]
+  -out                  (1 arg) :    output directory for result files [Default: ./MinYS_results]
 
 [mapping options]:
   -ref                  (1 arg) :    Bwa index
@@ -93,6 +93,7 @@ head mtg_results/gapfilling/minia_k31_abundancemin_auto_filtered_400_gapfilling_
   In the first case, `-assembly-kmer-size` should be supplied as the overlap between contigs.
 
 
+### Usage
 ### Utility scripts :
 
 Some utility scripts are supplied along with MinYS in order to facilitate the post processing of the gfa graph :
