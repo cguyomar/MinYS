@@ -42,7 +42,7 @@ parserMain.add_argument('-in', action="store", dest="input_file", help="Input re
 parserMain.add_argument('-1', action="store", dest="input_file1", help="Input reads first file", required=False)
 parserMain.add_argument('-2', action="store", dest="input_file2", help="Input reads second file", required=False)
 parserMain.add_argument('-fof', action="store", dest="input_fof", help="Input file of read files (if paired files, 2 columns tab-separated)", required=False)
-parserMain.add_argument('-out', action="store", dest="out", default="./mtg_results", help="output directory for result files")
+parserMain.add_argument('-out', action="store", dest="out", default="./MinYS_results", help="output directory for result files")
 
 parserMapping.add_argument('-ref', action="store", dest="ref_genome", help="Bwa index", required=False)
 parserMapping.add_argument('-mask', action="store", dest="mask", help="Bed file for region removed from mapping", required=False)
