@@ -93,7 +93,10 @@ head MinYS_results/gapfilling/minia_k31_abundancemin_auto_filtered_400_gapfillin
   In the first case, `-assembly-kmer-size` should be supplied as the overlap between contigs.
 
 
-### Usage
+### Documentation
+
+A [step by step tutorial](doc/tutorial.ipynb) of the analysis of one sample presented in the paper is available as a Jupyter notebook.
+
 ### Utility scripts :
 
 Some utility scripts are supplied along with MinYS in order to facilitate the post processing of the gfa graph :
