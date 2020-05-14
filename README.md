@@ -42,7 +42,7 @@ make -C graph_simplification/nwalign/
 
 #### Test run
 ```
-MinYS.py -1 test_data/reads.1.fq -2 test_data/reads.2.fq -ref test_data/ref.fa -out MinYS_result
+MinYS.py -1 test_data/reads.1.fq -2 test_data/reads.2.fq -ref test_data/ref.fa -out MinYS_results
 # look at the output file:
 head MinYS_results/gapfilling/minia_k31_abundancemin_auto_filtered_400_gapfilling_k31_abundancemin_auto.simplified.gfa
 # should contain only one sequence node of 15,722 bp, or see also the logs:
@@ -94,6 +94,8 @@ more MinYS_results/logs/simplification.log
 - If *minia* or *MindTheGap* are not in the $PATH environment variable, a path to the minia binary or to the MindTheGap build directory has to be supplied using `-minia-bin` or `-mtg-dir` options
 - `-contigs` and `-graph` may be used to bypass the mapping/assembly step, and the graph creation, respectively.
   In the first case, `-assembly-kmer-size` should be supplied as the overlap between contigs.
+- Troubleshooting: 
+  - If running on a Lustre filesystem you might have problems with file locking while writing HDF5 output. Make sure your output directory is located on a local tmp directory or a NFS mounted directory, or try setting the environment variable `HDF5_USE_FILE_LOCKING` to 'FALSE'.
 
 
 ### Documentation
