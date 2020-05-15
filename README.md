@@ -94,13 +94,13 @@ more MinYS_results/logs/simplification.log
 - If *minia* or *MindTheGap* are not in the $PATH environment variable, a path to the minia binary or to the MindTheGap build directory has to be supplied using `-minia-bin` or `-mtg-dir` options
 - `-contigs` and `-graph` may be used to bypass the mapping/assembly step, and the graph creation, respectively.
   In the first case, `-assembly-kmer-size` should be supplied as the overlap between contigs.
-- Troubleshooting: 
+- Troubleshooting:
   - If running on a Lustre filesystem you might have problems with file locking while writing HDF5 output. Make sure your output directory is located on a local tmp directory or a NFS mounted directory, or try setting the environment variable `HDF5_USE_FILE_LOCKING` to 'FALSE'.
 
 
 ### Documentation
 
-A [step by step tutorial](doc/tutorial.ipynb) of the analysis of one sample presented in the paper is available as a Jupyter notebook.
+A step by step tutorial of the analysis of one sample presented in the paper is available as a Jupyter [notebook](doc/tutorial.ipynb) (or in [markdown](doc/tutorial.md)).
 
 ### Utility scripts :
 
@@ -114,7 +114,7 @@ Some utility scripts are supplied along with MinYS in order to facilitate the po
 
 - `graph_simplification/gfa2fasta.py in.gfa out.fa`
   Return all the sequences of the graph in a multi-fasta file
- 
+
 ### Reference
 
 MinYS: Mine Your Symbiont by targeted genome assembly in symbiotic communities. Guyomar C, Delage W, Legeai F, Mougel C, Simon JC, Lemaitre C. BioRxiv 2019, [doi:10.1101/2019.12.13.875021](https://www.biorxiv.org/content/10.1101/2019.12.13.875021v1)
