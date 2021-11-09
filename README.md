@@ -23,6 +23,7 @@ MinYS was developed in the [GenScale lab](https://team.inria.fr/genscale/) by :
 - [Minia](https://github.com/GATB/minia) (contig assembly)
 - [MindTheGap](https://github.com/GATB/MindTheGap) (gap-filling)
 - [Bandage](https://github.com/rrwick/Bandage) (Optionnal, for assembly graph visualization)
+- Samtools
 
 ### Installation
 
