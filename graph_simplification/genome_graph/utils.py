@@ -6,7 +6,7 @@ alt_map = {'ins':'0'}
 complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'} 
 
 def reverse_complement(dna):
-    complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
+    complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A', 'N': 'N'}
     return ''.join([complement[base] for base in dna[::-1]])
 
 def compare_strings(str1,str2):
