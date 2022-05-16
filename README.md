@@ -118,4 +118,4 @@ Some utility scripts are supplied along with MinYS in order to facilitate the po
 
 ### Reference
 
-MinYS: Mine Your Symbiont by targeted genome assembly in symbiotic communities. Guyomar C, Delage W, Legeai F, Mougel C, Simon JC, Lemaitre C. BioRxiv 2019, [doi:10.1101/2019.12.13.875021](https://www.biorxiv.org/content/10.1101/2019.12.13.875021v1)
+MinYS: Mine Your Symbiont by targeted genome assembly in symbiotic communities. Guyomar C, Delage W, Legeai F, Mougel C, Simon JC, Lemaitre C. _NAR Genomics and Bioinformatics_ 2020, 2(3):lqaa047, [doi:10.1093/nargab/lqaa047](https://doi.org/10.1093/nargab/lqaa047)
