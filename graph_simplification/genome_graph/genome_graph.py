@@ -115,6 +115,7 @@ class GenomeGraph:
               nodeIds = {}  # Used to retrieve a node Id from a name. Is it useful though?
               nlines = 0
               with open(file) as f:
+                     links = set()
                      for line in f:
                             nlines += 1
                             if re.match(r"S.*", line):
@@ -123,21 +124,27 @@ class GenomeGraph:
                                    g.add_node(nodeName,nodeSeq,check)
                                    nodeIds[nodeName] = g.nNodes()
                             elif re.match(r"L.*",line):
-                                   startName,startDir,endName,endDir,overlap = line.split("\t")[1:]
+                                   # ALl links are kept for later, so that all segments are already
+                                   #  in the graph when we deal with them
+                                   links.add(line)
                                    
-                                   if g.overlap == 0:
-                                          overlap = int(overlap.replace('M\n',''))
-                                          g.overlap = overlap
+                     for line in links:
+                            startName,startDir,endName,endDir,overlap = line.split("\t")[1:]
                                    
-                                   startNode = nodeIds[startName]
-                                   endNode = nodeIds[endName]
+                            if g.overlap == 0:
+                                   overlap = int(overlap.replace('M\n',''))
+                                   g.overlap = overlap
+                            
+                            startNode = nodeIds[startName]
+                            endNode = nodeIds[endName]
 
-                                   if startDir == "-":
-                                          startNode = - startNode
-                                   if endDir == "-":
-                                          endNode = - endNode
+                            if startDir == "-":
+                                   startNode = - startNode
+                            if endDir == "-":
+                                   endNode = - endNode
 
-                                   g.add_edge(startNode,endNode)                                  
+                            g.add_edge(startNode,endNode)
+
               return(g)     
 
        def write_gfa(self,filename):
