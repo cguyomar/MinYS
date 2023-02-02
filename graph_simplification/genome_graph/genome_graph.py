@@ -16,6 +16,8 @@ import sys
 from .utils import reverse_complement,compare_strings, nw_align, locate_nw_binary
 #from alignment import PairAlign
 from .paths import Path,setExtend
+# from .bubble import find_bubble_from_node
+from .find_bubbles import find_bubble_from_node
 
 nwCommand = locate_nw_binary()
 
@@ -106,6 +108,26 @@ class GenomeGraph:
               else:
                      nodeSeq = self.nodes[nodeId].nodeSeq.strip()
               return(nodeSeq)
+
+       def find_bubbles(self):
+              found_bubbles = set()
+              for v in self.nodes.keys():
+                     b_f = find_bubble_from_node(self,v)
+                     b_r = find_bubble_from_node(self,-v)
+
+                     for b in (b_f,b_r):
+                            if b!= None:
+                                   # All bubbles are found twice
+                                   # we check we don't already have the reverse version of b
+                                   # We also don't store -/- and -/+ bubbles
+                                   st = b.get_st_nodes()
+                                   if st[0] < 0:
+                                          continue
+                                   if b not in found_bubbles and b.reverse() not in found_bubbles:
+                                          found_bubbles.add(b)
+              return(found_bubbles)
+
+
    
            
        @classmethod
