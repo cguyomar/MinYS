@@ -120,8 +120,7 @@ class GenomeGraph:
                                    # All bubbles are found twice
                                    # we check we don't already have the reverse version of b
                                    # We also don't store -/- and -/+ bubbles
-                                   st = b.get_st_nodes()
-                                   if st[0] < 0:
+                                   if b.sId < 0:
                                           continue
                                    if b not in found_bubbles and b.reverse() not in found_bubbles:
                                           found_bubbles.add(b)

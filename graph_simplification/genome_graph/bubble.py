@@ -37,11 +37,17 @@ class Bubble:
             map(lambda x:-x,self.nodes_inside_ids)
             )
 
-    def get_st_nodes(self):
-        return((self.s,self.t))
+    def is_included(self,other):
+        # Return if the bubble is included in another
+        # i.e. it's seed and target are nodes of the other
+        # it's not necessary to check directionality
+        if (self.s in other.nodes_inside and
+            self.t in other.nodes_inside):
+            return(True)
+        else:
+            return(False)
 
-    def get_all_nodes(self):
-        return(self.nodes_inside.union(self.get_st_nodes))
+
 
     def __eq__(self,other):
         if isinstance(other, self.__class__):

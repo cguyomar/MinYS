@@ -18,19 +18,25 @@ S = set()
 seen = set()
 visited = set()
 
-
-
-
 def name(n,g=g):
     return(g.nodes[n].nodeName)
 
-
-
-
-
 bubbles = g.find_bubbles()
 
-for b in bubbles:
-    print(b)
+print(f'Found {len(bubbles)} bubbles')
+
+# Remove sub-bubbles
+to_remove = set()
+for b1 in bubbles:
+    for b2 in bubbles:
+        if b1.is_included(b2):
+            to_remove.add(b1)
+            break
+
+for b in to_remove:
+    bubbles.remove(b)
+
+print(f'Found {len(bubbles)} bubbles')
+
 
    
