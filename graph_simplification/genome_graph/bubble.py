@@ -1,25 +1,30 @@
 class Bubble:
-    def __init__(self,g,s,t,nodes_inside):
+    def __init__(self,g,sId,tId,nodes_inside_ids):
+        # We store both the node objects and the node ids (whose sign gives directionality)
         self.g = g
-        self.s = s
-        self.t = t
-        self.nodes_inside = tuple(sorted(list(nodes_inside)))
+        self.s = self.g.nodes[abs(sId)]
+        self.sId = sId
+        self.t = self.g.nodes[abs(tId)]
+        self.tId = tId
+        # sorted tuple to make bubbles hashable :
+        self.nodes_inside_ids = tuple(sorted(list(nodes_inside_ids)))
+        self.nodes_inside = {g.nodes[abs(id)] for id in nodes_inside_ids}
 
     def __repr__(self):
         
-        if self.s > 0:
-            sName = self.g.nodes[self.s].nodeName
+        if self.sId > 0:
+            sName = self.s.nodeName
         else:
-            sName = self.g.nodes[-self.s].nodeName + "_rc"
+            sName = self.s.nodeName + "_rc"
         
-        if self.t > 0:
-            tName = self.g.nodes[self.t].nodeName
+        if self.tId > 0:
+            tName = self.t.nodeName
         else:
-            tName = self.g.nodes[-self.t].nodeName + "_rc"
+            tName = self.t.nodeName + "_rc"
         res = (
             f'Bubble from node {sName}'
             f' to {tName}'
-            f' containing nodes {[self.g.nodes[-n].nodeName+"_rc" if n<0 else self.g.nodes[n].nodeName for n in self.nodes_inside]}'
+            f' containing nodes {[self.g.nodes[-n].nodeName+"_rc" if n<0 else self.g.nodes[n].nodeName for n in self.nodes_inside_ids]}'
         )
         return res
 
@@ -27,9 +32,9 @@ class Bubble:
         # b and b.reverse() are actually equivalent
         return Bubble(
             self.g,
-            -self.t,
-            -self.s,
-            map(lambda x:-x,self.nodes_inside)
+            -self.tId,
+            -self.sId,
+            map(lambda x:-x,self.nodes_inside_ids)
             )
 
     def get_st_nodes(self):
@@ -46,7 +51,7 @@ class Bubble:
 
     def __hash__(self):
         return hash((
-            self.s,
-            self.t,
-            self.nodes_inside
+            self.sId,
+            self.tId,
+            self.nodes_inside_ids
         ))
