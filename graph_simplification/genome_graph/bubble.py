@@ -34,7 +34,7 @@ class Bubble:
             self.g,
             -self.tId,
             -self.sId,
-            map(lambda x:-x,self.nodes_inside_ids)
+            tuple(sorted(list(map(lambda x:-x,self.nodes_inside_ids))))
             )
 
     def is_included(self,other):
@@ -46,8 +46,6 @@ class Bubble:
             return(True)
         else:
             return(False)
-
-
 
     def __eq__(self,other):
         if isinstance(other, self.__class__):

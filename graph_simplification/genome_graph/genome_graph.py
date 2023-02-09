@@ -48,6 +48,20 @@ class GenomeGraph:
               self.overlap = 0
               self.maxId = 0
 
+       def subgraph(self,kept_nodes_ids):
+              kept_nodes_ids = set(map(lambda x:abs(x),kept_nodes_ids))
+              newG = GenomeGraph()
+              newG.nodes = {abs(id):self.nodes[abs(id)] for id in kept_nodes_ids}
+
+              # Keep only edges starting from a kept node
+              # And remove edges ending on nodes not kept
+              kept_targets = kept_nodes_ids.union(map(lambda x:-x,kept_nodes_ids))
+              newG.edges = {k:v.intersection(kept_targets) for (k,v) in self.edges.items() if abs(k) in kept_nodes_ids}
+
+              newG.overlap = self.overlap
+              newG.maxId = max({abs(id) for id in kept_nodes_ids})
+              return(newG)
+
        def nNodes(self):
               return(len(self.nodes))
        
@@ -119,8 +133,8 @@ class GenomeGraph:
                             if b!= None:
                                    # All bubbles are found twice
                                    # we check we don't already have the reverse version of b
-                                   # We also don't store -/- and -/+ bubbles
-                                   if b.sId < 0:
+                                   # We also don't store -/- bubbles
+                                   if b.sId < 0 and b.tId <0:
                                           continue
                                    if b not in found_bubbles and b.reverse() not in found_bubbles:
                                           found_bubbles.add(b)

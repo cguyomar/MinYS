@@ -8,7 +8,7 @@ class Path:
         self.nodeIds = [nodeId]
         self.nNodes = 1
         self.extendable = True
-        self.circular = False
+        # self.circular = False
     
     def is_circular(self,g):
         neighbors = g.edges[self.nodeIds[-1]]
@@ -16,7 +16,13 @@ class Path:
             return(True)
         else:
             return(False)
-    
+
+    def trim(self,g):
+        # Remove first and last nodes
+        self.nodeIds = self.nodeIds[1:-1]
+        self.nodes = [g.nodes[abs(id)] for id in self.nodeIds]
+        self.extendable = True
+
     def extend_right(self,g):
         lastNode = self.nodeIds[-1]
         neighbors = g.edges[lastNode].copy()
