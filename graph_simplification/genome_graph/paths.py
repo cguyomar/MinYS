@@ -17,9 +17,9 @@ class Path:
         else:
             return(False)
 
-    def trim(self,g):
-        # Remove first and last nodes
-        self.nodeIds = self.nodeIds[1:-1]
+    def trim_left(self,g):
+        # Removes the first node
+        self.nodeIds = self.nodeIds[1:]
         self.nodes = [g.nodes[abs(id)] for id in self.nodeIds]
         self.extendable = True
 
@@ -92,27 +92,29 @@ class Path:
         else:
             return(False)
 
-    def extend_both(self,g):
+    def extend(self,g,dir=0):
         # Try extending a path towards the right, and towards the left if it fails
         extendedPaths = set()
         extended = False
+        assert dir in (-1,0,1)
 
-        extR = self.extend_right(g)
-        if extR != False:
-            extendedPaths = extR
-            # extended = True
-            return(extendedPaths)
+        if dir >= 0:
+            extR = self.extend_right(g)
+            if extR != False:
+                extendedPaths = extR
+                # extended = True
+                return(extendedPaths)
 
+        if dir <= 0:
+            extL = self.extend_left(g)
 
-        extL = self.extend_left(g)
-
-        if extL != False:
-            # extended = True
-            extendedPaths = extL
-            return(extendedPaths)
-        else:
-            self.extendable = False
-            return({self})
+            if extL != False:
+                # extended = True
+                extendedPaths = extL
+                return(extendedPaths)
+        
+        self.extendable = False
+        return({self})
 
             
 
@@ -160,13 +162,15 @@ class Path:
             g.rem_node(abs(node))
 
             
-def setExtend(paths,g):
-    # extends a set of paths in both directions
+def setExtend(paths,g,dir=0):
+    # extends a set of paths
+    # dir = 0 : extend in both directions
+    # dir = -1/1 : extend to the left/right
     extendedPaths = set()
     extended=False
 
     for p in paths:
-        extension = p.extend_both(g)
+        extension = p.extend(g,dir)
         if len(extension) > 1 or list(extension)[0].extendable == True:
             extended = True
 

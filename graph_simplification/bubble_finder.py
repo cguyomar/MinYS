@@ -48,12 +48,12 @@ if __name__ == '__main__':
       
         subg = g.subgraph(bubble_nodes)
 
-        paths = subg.find_all_paths(b.sId)
+        paths = subg.find_all_paths(b.sId,dir=1)
         print(f'Found {len(paths)} paths in bubble')
         to_compare = set()
         for p_id,p in enumerate(paths):
             # print(g.get_neighbors(p.nodeIds[len(p.nod eIds)-1]))d alongside the results directory:
-            p.trim(g)
+            p.trim_left(g)
             # print(g.get_neighbors(p.nodeIds[len(p.nod eIds)-1]))
             # print([g.nodes[abs(nId)].nodeName for nId in p.nodeIds]) 
             # Add a new node for each path

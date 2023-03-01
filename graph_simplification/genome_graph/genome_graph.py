@@ -442,12 +442,11 @@ class GenomeGraph:
                             visited_nodes.add(node)
                      node += 1   
 
-       def find_all_paths(self,startNode):
+       def find_all_paths(self,startNode,dir=0):
        # Enumerates all possible paths going through a node
               p = Path(self,startNode)
               paths = {p}
-              extendedPaths, extended = setExtend(paths,self)
-              #print(extended)
+              extendedPaths, extended = setExtend(paths,self,dir)
               nbExtension = 1
               terminatedPaths = set()
               while len(extendedPaths)>0:
@@ -459,8 +458,7 @@ class GenomeGraph:
                              terminatedPaths.add(p)
                          else:
                              paths.add(p)
-                     extendedPaths, extended = setExtend(paths,self)
-
+                     extendedPaths, extended = setExtend(paths,self,dir)
               return(terminatedPaths)
 
 

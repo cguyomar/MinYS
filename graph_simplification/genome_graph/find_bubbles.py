@@ -5,7 +5,6 @@ def find_bubble_from_node(g,v):
     seen = set()
     visited = set()
     nodes_inside = set()
-
     S.add(v)
     while len(S) != 0:
         n = S.pop()
@@ -18,7 +17,7 @@ def find_bubble_from_node(g,v):
             # tip
             break
         for u in g.get_neighbors(n):
-            if u == v:
+            if u == -v:
                 # cycle
                 break
             seen.add(u)
