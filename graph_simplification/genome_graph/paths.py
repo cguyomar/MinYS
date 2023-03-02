@@ -17,9 +17,9 @@ class Path:
         else:
             return(False)
 
-    def trim_left(self,g):
-        # Removes the first node
-        self.nodeIds = self.nodeIds[1:]
+    def trim(self,g):
+        # Removes the first and last node
+        self.nodeIds = self.nodeIds[1:-1]
         self.nodes = [g.nodes[abs(id)] for id in self.nodeIds]
         self.extendable = True
 

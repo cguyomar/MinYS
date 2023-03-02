@@ -53,7 +53,7 @@ if __name__ == '__main__':
         to_compare = set()
         for p_id,p in enumerate(paths):
             # print(g.get_neighbors(p.nodeIds[len(p.nod eIds)-1]))d alongside the results directory:
-            p.trim_left(g)
+            p.trim(g)
             # print(g.get_neighbors(p.nodeIds[len(p.nod eIds)-1]))
             # print([g.nodes[abs(nId)].nodeName for nId in p.nodeIds]) 
             # Add a new node for each path
