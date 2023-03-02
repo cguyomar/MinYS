@@ -50,7 +50,7 @@ def read_pyani_output(file):
                 line_count += 1
         return(float(val1),float(val2))
 
-def compare_paths(paths,outDir):
+def compare_paths(paths,outDir,cov_thr,id_thr):
         print("Comparing "+str(len(paths))+" paths")
 
         # Preparing dirs
@@ -102,9 +102,9 @@ def compare_paths(paths,outDir):
                                 # print("Coverage : "+str(coverage))
                                 # print("Identity : "+str(identity))
 
-                                if coverage > 0.99 and identity > 0.99:
+                                if coverage > cov_thr and identity > id_thr:
                                         # ref is identical
-                                        # print("Found similar sequence in refseq - skipping")
+                                        # print("Found similar sequenceop.add_argument("cov_thr",type="float",default=0.99) in refseq - skipping")
                                         os.remove(os.path.join(tmpDir,refPath))
                                         os.remove(os.path.join(tmpDir,seqName+".fa"))
                                         newSeq = False
@@ -127,6 +127,8 @@ def compare_paths(paths,outDir):
 op = argparse.ArgumentParser()
 op.add_argument("infile")
 op.add_argument("outdir")
+op.add_argument("--cov_thr", type=float, default=0.99, required=False)
+op.add_argument("--id_thr", type=float, default=0.99, required=False)
 opts = op.parse_args()
 
 # Prepare out dir
@@ -152,6 +154,6 @@ for comp in comps:
     print("Found "+str(len(paths))+" paths in component "+str(compIter)+"\n")
 
     compDir = os.path.join(opts.outdir,"comp_"+str(compIter))
-    compare_paths(paths,compDir)
+    compare_paths(paths,compDir,opts.cov_thr,opts.id_thr)
 
     compIter += 1
