@@ -76,4 +76,8 @@ if __name__ == '__main__':
         print(f"Removing {len(to_remove)} redundant paths")
         for n in to_remove:
             g.rem_node(n)
+    
+    g.merge_all_linear_paths()
+
     g.write_gfa(opts.out)
+
