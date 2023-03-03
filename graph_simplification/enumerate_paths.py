@@ -112,6 +112,9 @@ def compare_paths(paths,outDir,cov_thr,id_thr):
                                                 break
                                         else:
                                                 os.remove(os.path.join(tmpDir,refPath))
+                        else:
+                                maxCov = "NA"
+                                maxId = "NA"
 
                         #No break -> the sequence is unique
                         if newSeq:
