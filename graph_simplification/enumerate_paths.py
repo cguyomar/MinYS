@@ -83,34 +83,35 @@ def compare_paths(paths,outDir,cov_thr,id_thr):
 
                         write2fasta(seq,seqName,os.path.join(tmpDir,seqName+".fa"))
 
-                        # Now compare to each of the ref seq
-                        refPaths = [f for f in os.listdir(outDir) if os.path.isfile(os.path.join(outDir, f))]
                         newSeq = True
-                        maxCov = 0
-                        maxId = 0
-                        for refPath in refPaths:
-                                # print("Comparing with "+refPath)
+                        if cov_thr != 1 and id_thr != 1:
+                                # Now compare to each of the ref seq
+                                refPaths = [f for f in os.listdir(outDir) if os.path.isfile(os.path.join(outDir, f))]
+                                maxCov = 0
+                                maxId = 0
+                                for refPath in refPaths:
+                                        # print("Comparing with "+refPath)
 
-                                # Copy the current ref in the ani dir
-                                shutil.copyfile(os.path.join(outDir,refPath),os.path.join(tmpDir,refPath))
-                                identity,coverage = run_pyani(tmpDir)
+                                        # Copy the current ref in the ani dir
+                                        shutil.copyfile(os.path.join(outDir,refPath),os.path.join(tmpDir,refPath))
+                                        identity,coverage = run_pyani(tmpDir)
 
-                                if identity > maxId:
-                                        maxId = identity
-                                if coverage > maxCov:
-                                        maxCov = coverage
-                                # print("Coverage : "+str(coverage))
-                                # print("Identity : "+str(identity))
+                                        if identity > maxId:
+                                                maxId = identity
+                                        if coverage > maxCov:
+                                                maxCov = coverage
+                                        # print("Coverage : "+str(coverage))
+                                        # print("Identity : "+str(identity))
 
-                                if coverage > cov_thr and identity > id_thr:
-                                        # ref is identical
-                                        # print("Found similar sequenceop.add_argument("cov_thr",type="float",default=0.99) in refseq - skipping")
-                                        os.remove(os.path.join(tmpDir,refPath))
-                                        os.remove(os.path.join(tmpDir,seqName+".fa"))
-                                        newSeq = False
-                                        break
-                                else:
-                                        os.remove(os.path.join(tmpDir,refPath))
+                                        if coverage > cov_thr and identity > id_thr:
+                                                # ref is identical
+                                                # print("Found similar sequenceop.add_argument("cov_thr",type="float",default=0.99) in refseq - skipping")
+                                                os.remove(os.path.join(tmpDir,refPath))
+                                                os.remove(os.path.join(tmpDir,seqName+".fa"))
+                                                newSeq = False
+                                                break
+                                        else:
+                                                os.remove(os.path.join(tmpDir,refPath))
 
                         #No break -> the sequence is unique
                         if newSeq:
